@@ -77,8 +77,16 @@ namespace Sitecore.Support.ContentSearch.SolrProvider.Agents
                 {
                     this.Log.Debug(" - Re-initializing index '{0}' ...".FormatWith(index.Name));
                     index.Initialize();
-                    this.Log.Debug(" - DONE");
-                    reinitializedIndexes.Add(index);
+                    // Sitecore.Support.163850
+                    if ((index as SolrSearchIndex) == null)
+                    {
+                        Log.Debug(string.Format("Sitecore.Support.163850: '{0}' index is not SolrSearchIndex", index.Name));
+                    }
+                    else if ((index as SolrSearchIndex).IsInitialized)
+                    {
+                        this.Log.Debug(" - DONE");
+                        reinitializedIndexes.Add(index);
+                    }
                 }
                 catch (Exception ex)
                 {
